@@ -1,0 +1,15 @@
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://dbuser:root@localhost:5432/pg-db"
+}
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Messages {
+    id          Int    @id @default(autoincrement())
+    description String
+}
