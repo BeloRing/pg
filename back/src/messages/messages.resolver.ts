@@ -1,24 +1,18 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 @Resolver()
 export class MessagesResolver {
 
     @Query('messages')
-    async getMessages() {
-        const allMessages = await prisma.messages.findMany();
+    getMessages(@Context() context) {
+        const allMessages = context.prisma.messages.findMany();
         return allMessages;
     }
 
     @Mutation()
-    async createMessage(@Args('description') description: string) {
-        const id = this.messagesAdd.length;
-        const newMessage = { id, description };
-        this.messagesAdd.push(newMessage);
-        const messageCreated = await prisma.messages.create({
-            data: newMessage,
+    createMessage(@Args('description') description: string, @Context() context) {
+        const messageCreated = context.prisma.messages.create({
+            data: {description},
         });
         return messageCreated;
     }
